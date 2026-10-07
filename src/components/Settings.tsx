@@ -3,7 +3,9 @@ import { useStore } from '../store';
 import { useUi } from '../ui';
 import { describeNotifyStatus, useNotify } from '../notify';
 import { exportBackup, parseBackup } from '../lib/storage';
-import { hasGoogle, hasPush, hasSupabase } from '../integrations/config';
+import { hasPush, hasSupabase } from '../integrations/config';
+import { useGcal } from '../integrations/gcalSync';
+import { readPass, savePass } from '../integrations/passcode';
 import { currentUserEmail, pullState, pushState, signInWithEmail, signOut, subscribePush } from '../integrations/supabase';
 import { Sheet } from './common';
 
@@ -107,14 +109,45 @@ function Body() {
         )}
       </section>
 
-      <section className="card">
-        <h3>Google Agenda</h3>
-        <div className="note-box">
-          <strong>{hasGoogle ? 'ID de cliente encontrado, mas a conexão ainda não foi implementada.' : 'Não conectado.'}</strong>
-          <div>Seus eventos já foram importados uma vez. A sincronização contínua precisa de OAuth do Google (README); a estrutura já está preparada.</div>
-        </div>
-      </section>
+      <GoogleBlock />
       {msg && <p role="status" className="small"><strong>{msg}</strong></p>}
     </div>
+  );
+}
+
+function GoogleBlock() {
+  const { status, syncNow } = useGcal();
+  const { state } = useStore();
+  const [pass, setPass] = useState('');
+  const hasPass = Boolean(readPass());
+  const last = status.last;
+  const when = state.gcal?.lastSync ? new Date(state.gcal.lastSync).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+  return (
+    <section className="card">
+      <h3>Google Agenda</h3>
+      <p className="small muted">
+        O app <strong>lê</strong> o seu Google Agenda pelo endereço secreto (só leitura) ao abrir e a cada 10 minutos. O que você muda aqui não vai para o Google. O Google manda no título, data e horário; o app guarda concluído, categoria, prioridade e lembretes.
+      </p>
+      {!hasPass || status.phase === 'needpass' ? (
+        <form onSubmit={(e) => { e.preventDefault(); if (pass.trim()) { savePass(pass.trim()); setPass(''); } }}>
+          <div className="field" style={{ marginBottom: 8 }}>
+            <label htmlFor="g-pass">Senha do assistente (a mesma da Vercel)</label>
+            <input id="g-pass" type="password" className="input" autoComplete="off" value={pass} onChange={(e) => setPass(e.target.value)} />
+          </div>
+          <button type="submit" className="btn small" disabled={!pass.trim()}>Salvar senha</button>
+        </form>
+      ) : null}
+      {status.phase === 'ok' && (
+        <div className="note-box ok">
+          <strong>Lido{when ? ` em ${when}` : ''}.</strong> {last ? `${last.read} eventos no Google · ${last.added} novos, ${last.updated} atualizados, ${last.removed} removidos.` : ''}
+          <div>Um evento novo pode demorar para aparecer: o Google atualiza esse link devagar, às vezes por várias horas.</div>
+        </div>
+      )}
+      {status.phase === 'syncing' && <div className="note-box">Lendo o Google Agenda…</div>}
+      {['error', 'off', 'dev'].includes(status.phase) && <div className="note-box"><strong>{status.phase === 'off' ? 'Não ativado.' : status.phase === 'dev' ? 'Indisponível aqui.' : 'Erro.'}</strong> {status.message}</div>}
+      <div style={{ marginTop: 10 }}>
+        <button type="button" className="btn small" onClick={() => void syncNow()} disabled={status.phase === 'syncing'}>Atualizar agora</button>
+      </div>
+    </section>
   );
 }

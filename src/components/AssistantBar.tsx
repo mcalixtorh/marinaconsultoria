@@ -3,30 +3,13 @@ import { useStore } from '../store';
 import { applyPlan, buildContext, planActions, type Plan } from '../assistant/actions';
 import type { AppState } from '../types';
 import { Icon } from './Icon';
-
-const PASS_KEY = 'central-rotina:assistente-senha';
+import { readPass, savePass } from '../integrations/passcode';
 
 type Result =
   | { kind: 'info'; message: string; problems: string[] }
   | { kind: 'error'; message: string }
   | { kind: 'confirm'; message: string; plan: Plan }
   | { kind: 'done'; message: string; lines: string[]; warnings: string[]; problems: string[]; undo: { snapshot: AppState; updatedAt: number } };
-
-function readPass(): string {
-  try {
-    return localStorage.getItem(PASS_KEY) ?? '';
-  } catch {
-    return '';
-  }
-}
-function savePass(v: string): void {
-  try {
-    if (v) localStorage.setItem(PASS_KEY, v);
-    else localStorage.removeItem(PASS_KEY);
-  } catch {
-    /* sem armazenamento: pede a senha de novo na próxima vez */
-  }
-}
 
 export function AssistantBar() {
   const { state, dispatch, today } = useStore();

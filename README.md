@@ -37,7 +37,7 @@ Sem nenhuma configuração, tudo isto funciona e fica salvo **no aparelho**:
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # 72 testes (datas, recorrência, atrasados, lembretes, busca, alarme rápido, assistente)
+npm test           # 99 testes (datas, recorrência, atrasados, lembretes, busca, alarme rápido, assistente, Google Agenda)
 npm run build
 ```
 
@@ -95,7 +95,30 @@ Comandos em português viram mudanças no app. Como funciona:
 - Não funciona no `npm run dev` (a função `/api` só existe publicada na Vercel).
 - **Status do teste:** a lógica de validação e a função foram testadas contra um servidor **falso** que imita a API. **Não houve teste com a Claude de verdade** (sem chave). Se a API recusar algum parâmetro, o app mostra "Erro da IA (código)" e o motivo aparece em Vercel › Logs.
 
-## Google Agenda (futuro)
+## Google Agenda (leitura pelo endereço secreto)
+
+O app **lê** o seu Google Agenda ao abrir e a cada 10 minutos (e em Ajustes › *Atualizar agora*).
+
+- **Só leitura, do Google para o app.** O que você cria ou muda no app **não** vai para o Google.
+- **Atraso do Google:** o Google atualiza esse link devagar. Um evento novo pode levar **de minutos a várias horas** para aparecer. Isso não dá para acelerar por esse caminho (só com a conexão oficial/OAuth).
+- **Quem manda em quê:** o Google manda no título, data, horário, descrição e link; o app guarda concluído, categoria, prioridade, lembretes e pessoa. Se você mudar a data de um evento do Google só no app, a próxima leitura devolve a data do Google.
+- **Eventos que se repetem** viram um item por ocorrência (14 dias para trás e 120 para frente). Exceções e datas excluídas são respeitadas.
+- **Sem duplicar:** os eventos da carga inicial são reconhecidos por título + data + horário.
+- **Apagou no app, não volta:** o que você cancela/apaga no app é lembrado e não é recriado. Evento apagado no Google some do app (só os futuros). Uma leitura vazia nunca apaga nada.
+- **Segurança:** o endereço secreto fica **só no servidor** (`ICAL_URL` na Vercel); o navegador nunca o vê. A função só aceita endereços de `calendar.google.com` e exige a mesma senha do assistente (`ASSISTANT_PASSCODE`).
+
+**Para ativar** (Vercel › Environment Variables, todos os ambientes, e depois redeploy):
+
+| Variável | O que é |
+|---|---|
+| `ICAL_URL` | Google Agenda (no computador) › Configurações › seu calendário › *Integrar agenda* › **Endereço secreto no formato iCal** |
+| `ASSISTANT_PASSCODE` | a mesma senha do assistente (o app pede uma vez em cada aparelho: Ajustes › Google Agenda) |
+
+Se o link vazar, use *Redefinir endereço secreto* no Google e atualize `ICAL_URL`.
+
+> **Status do teste:** a leitura foi testada com calendários de exemplo (fusos, repetições com exceção, cancelados, dia inteiro) e com um Google simulado no navegador. **Não foi testada contra o seu calendário real.**
+
+## Google Agenda em dois sentidos (futuro, OAuth)
 
 Requer um projeto no Google Cloud com a Calendar API e um ID de cliente OAuth. O contrato a implementar está em `src/integrations/google.ts` (importar eventos, exportar itens). As telas não precisam mudar.
 

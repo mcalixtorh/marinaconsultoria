@@ -3,6 +3,7 @@ import type { Alarm, AppState, Category, DayPriority, Item, MissedNotice, Note, 
 import { toISO, nowMinutes } from './lib/dates';
 import { loadState, saveState } from './lib/storage';
 import { reschedule, toggleDone } from './lib/tasks';
+import { addIgnored } from './lib/gcal';
 
 export type Action =
   | { type: 'item/save'; item: Item }
@@ -25,6 +26,7 @@ export type Action =
   | { type: 'notify/checked'; at: number; missed: MissedNotice[]; disableAlarms: string[]; usedSnoozes: string[] }
   | { type: 'notify/dismiss'; key?: string }
   | { type: 'snooze/add'; snooze: Snooze }
+  | { type: 'gcal/meta'; gcal: AppState['gcal'] }
   | { type: 'state/replace'; state: AppState };
 
 const upsert = <T extends { id: string }>(list: T[], v: T): T[] =>
@@ -35,8 +37,10 @@ function reduce(s: AppState, a: Action): AppState {
   switch (a.type) {
     case 'item/save':
       return touch({ items: upsert(s.items, a.item) });
-    case 'item/delete':
-      return touch({ items: s.items.filter((i) => i.id !== a.id) });
+    case 'item/delete': {
+      const gone = s.items.find((i) => i.id === a.id);
+      return touch({ items: s.items.filter((i) => i.id !== a.id), ...(gone?.ext ? { gcal: addIgnored(s.gcal, gone.ext) } : {}) });
+    }
     case 'item/toggle':
       return touch({ items: s.items.map((i) => (i.id === a.id ? toggleDone(i, a.date) : i)) });
     case 'item/status':
@@ -92,6 +96,8 @@ function reduce(s: AppState, a: Action): AppState {
       return { ...s, missed: a.key ? s.missed.filter((m) => m.key !== a.key) : [] };
     case 'snooze/add':
       return { ...s, snoozes: [...s.snoozes, a.snooze] };
+    case 'gcal/meta':
+      return { ...s, gcal: a.gcal };
     case 'state/replace':
       return a.state;
   }

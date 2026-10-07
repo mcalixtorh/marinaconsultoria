@@ -3,7 +3,7 @@
  * 2) mostra notificações (também as que chegam por push, quando configurado);
  * 3) ao tocar numa notificação, abre/foca o app.
  */
-const CACHE = 'central-rotina-v1';
+const CACHE = 'central-rotina-v2';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/manifest.webmanifest', '/icon-192.png'])).then(() => self.skipWaiting()));
@@ -17,7 +17,10 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== self.location.origin) return;
+  // dados ao vivo (Google Agenda, assistente): NUNCA do cache, senão ficam parados no passado
+  if (url.pathname.startsWith('/api/')) return;
   // páginas: rede primeiro (pega a versão nova), cache se estiver offline
   if (req.mode === 'navigate') {
     event.respondWith(fetch(req).then((res) => { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('/', copy)); return res; }).catch(() => caches.match('/')));

@@ -36,6 +36,8 @@ export interface Item {
   person?: string;
   link: string;
   src: string;
+  /** id do evento no Google Agenda (gcal-…), quando o item veio de lá */
+  ext?: string;
 }
 
 export interface Category {
@@ -93,6 +95,12 @@ export interface Snooze {
   at: number;
 }
 
+export interface GcalMeta {
+  lastSync: number;
+  /** eventos do Google que a Marina cancelou/apagou aqui: não voltam */
+  ignored: string[];
+}
+
 export interface AppState {
   version: number;
   items: Item[];
@@ -106,6 +114,8 @@ export interface AppState {
   lastCheck: number;
   missed: MissedNotice[];
   snoozes: Snooze[];
+  /** controle da leitura do Google Agenda */
+  gcal?: GcalMeta;
   updatedAt: number;
 }
 

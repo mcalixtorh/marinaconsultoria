@@ -2,6 +2,7 @@ import type { Alarm, AppState, Item, Kind, Prio, Recur, RecurType, RecurUnit, St
 import { longDate, parseISO, shortDate, toISO, weekdayName } from '../lib/dates';
 import { NO_RECUR, describeRecur, isRecurring } from '../lib/recurrence';
 import { isDoneOn, toggleDone } from '../lib/tasks';
+import { addIgnored } from '../lib/gcal';
 
 /**
  * Ações que o assistente pode pedir. A IA só PROPÕE: tudo passa por planActions
@@ -175,7 +176,7 @@ export function planActions(state: AppState, raw: unknown, today: string): Plan 
         plan.actions.push({ type: 'delete_item', id: it.id });
         plan.lines.push(`Cancelar e remover do app: "${it.title}" (${when(it.date, it.time)})`);
         plan.destructive = true;
-        if (it.src === 'Google Agenda') plan.warnings.push(`"${it.title}" veio do Google Agenda: ele continua lá e ninguém é avisado do cancelamento. Faça isso por fora, se precisar.`);
+        if (it.src === 'Google Agenda') plan.warnings.push(`"${it.title}" veio do Google Agenda: ele continua lá e ninguém é avisado do cancelamento (ele não volta para o app). Faça isso por fora, se precisar.`);
         break;
       }
       case 'create_alarm': {
@@ -249,9 +250,11 @@ export function applyPlan(state: AppState, plan: Plan, now = Date.now()): AppSta
       case 'complete_item':
         s = { ...s, items: s.items.map((i) => (i.id === a.id && isDoneOn(i, a.date ?? '') !== (a.done !== false) ? toggleDone(i, a.date ?? i.date) : i)) };
         break;
-      case 'delete_item':
-        s = { ...s, items: s.items.filter((i) => i.id !== a.id) };
+      case 'delete_item': {
+        const gone = s.items.find((i) => i.id === a.id);
+        s = { ...s, items: s.items.filter((i) => i.id !== a.id), ...(gone?.ext ? { gcal: addIgnored(s.gcal, gone.ext) } : {}) };
         break;
+      }
       case 'create_alarm': {
         const alarm: Alarm = { id: newId('a'), time: a.time, name: a.name ?? '', days: a.days ?? [], repeat: a.repeat === true, enabled: true };
         s = { ...s, alarms: [...s.alarms, alarm] };

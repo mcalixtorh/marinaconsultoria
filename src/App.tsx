@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import { hasSupabase } from './integrations/config';
+import { GcalSyncProvider, useGcal } from './integrations/gcalSync';
 import { NotifyProvider, useNotify } from './notify';
 import { StoreProvider, useStore } from './store';
 import { UiProvider, useUi, type TabId } from './ui';
@@ -42,7 +43,8 @@ const SCREENS: Record<TabId, ComponentType> = {
 
 function Shell() {
   const { tab, setTab, openEditor, setSettingsOpen } = useUi();
-  const { saveStatus, today } = useStore();
+  const { saveStatus, today, state } = useStore();
+  const { status: gcal } = useGcal();
   const Screen = SCREENS[tab];
   const saveText = { salvo: 'Salvo neste aparelho', salvando: 'Salvando…', erro: 'Não consegui salvar neste aparelho' }[saveStatus];
 
@@ -75,6 +77,8 @@ function Shell() {
         <span role="status">
           <i className={`dot${saveStatus === 'erro' ? ' err' : saveStatus === 'salvando' ? ' warn' : ''}`} />
           {saveText} · nuvem: {hasSupabase ? 'configurada (veja Ajustes)' : 'desligada'}
+          {gcal.phase === 'ok' && state.gcal ? ` · Google Agenda lida às ${new Date(state.gcal.lastSync).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : ''}
+          {gcal.phase === 'error' ? ' · Google Agenda: erro (veja Ajustes)' : ''}
         </span>
         <button type="button" className="btn small ghost" onClick={() => setSettingsOpen(true)}>
           <Icon name="gear" size={16} /> Ajustes e backup
@@ -109,9 +113,11 @@ export default function App() {
   return (
     <StoreProvider>
       <NotifyProvider>
-        <UiProvider>
-          <Shell />
-        </UiProvider>
+        <GcalSyncProvider>
+          <UiProvider>
+            <Shell />
+          </UiProvider>
+        </GcalSyncProvider>
       </NotifyProvider>
     </StoreProvider>
   );
