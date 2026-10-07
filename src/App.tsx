@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
-import { hasSupabase } from './integrations/config';
 import { GcalSyncProvider, useGcal } from './integrations/gcalSync';
+import { PushSyncProvider } from './integrations/pushSync';
 import { NotifyProvider, useNotify } from './notify';
 import { StoreProvider, useStore } from './store';
 import { UiProvider, useUi, type TabId } from './ui';
@@ -76,7 +76,7 @@ function Shell() {
       <footer className="footer">
         <span role="status">
           <i className={`dot${saveStatus === 'erro' ? ' err' : saveStatus === 'salvando' ? ' warn' : ''}`} />
-          {saveText} · nuvem: {hasSupabase ? 'configurada (veja Ajustes)' : 'desligada'}
+          {saveText}
           {gcal.phase === 'ok' && state.gcal ? ` · Google Agenda lida às ${new Date(state.gcal.lastSync).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : ''}
           {gcal.phase === 'error' ? ' · Google Agenda: erro (veja Ajustes)' : ''}
         </span>
@@ -114,9 +114,11 @@ export default function App() {
     <StoreProvider>
       <NotifyProvider>
         <GcalSyncProvider>
-          <UiProvider>
-            <Shell />
-          </UiProvider>
+          <PushSyncProvider>
+            <UiProvider>
+              <Shell />
+            </UiProvider>
+          </PushSyncProvider>
         </GcalSyncProvider>
       </NotifyProvider>
     </StoreProvider>

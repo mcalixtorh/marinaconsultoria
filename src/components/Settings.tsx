@@ -3,11 +3,12 @@ import { useStore } from '../store';
 import { useUi } from '../ui';
 import { describeNotifyStatus, useNotify } from '../notify';
 import { exportBackup, parseBackup } from '../lib/storage';
-import { hasPush, hasSupabase } from '../integrations/config';
 import { useGcal } from '../integrations/gcalSync';
 import { readPass, savePass } from '../integrations/passcode';
-import { currentUserEmail, pullState, pushState, signInWithEmail, signOut, subscribePush } from '../integrations/supabase';
+import { cloudGet, cloudPut, disablePush, enablePush, pushStatus, sendTest } from '../integrations/push';
+import { usePushSync } from '../integrations/pushSync';
 import { Sheet } from './common';
+import type { AppState } from '../types';
 
 export function Settings() {
   const { settingsOpen, setSettingsOpen } = useUi();
@@ -25,11 +26,6 @@ function Body() {
   const notify = describeNotifyStatus(info);
   const file = useRef<HTMLInputElement>(null);
   const [msg, setMsg] = useState('');
-  const [email, setEmail] = useState('');
-  const [user, setUser] = useState<string | null | undefined>(undefined);
-  useEffect(() => {
-    if (hasSupabase) void currentUserEmail().then(setUser);
-  }, []);
 
   const download = () => {
     const blob = new Blob([exportBackup(state)], { type: 'application/json' });
@@ -45,14 +41,6 @@ function Body() {
     if (!r.ok) return setMsg(r.error);
     dispatch({ type: 'state/replace', state: r.state });
     setMsg('Backup restaurado.');
-  };
-  const run = async (fn: () => Promise<string | null | void>, ok: string) => {
-    try {
-      const err = await fn();
-      setMsg(err ? String(err) : ok);
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : 'Algo deu errado.');
-    }
   };
 
   return (
@@ -74,40 +62,8 @@ function Body() {
         <div className={`note-box${notify.ok ? ' ok' : ''}`}><strong>{notify.label}</strong><div>{notify.hint}</div></div>
       </section>
 
-      <section className="card">
-        <h3>Sincronizar celular e computador</h3>
-        {!hasSupabase ? (
-          <div className="note-box"><strong>Não configurada.</strong> O app funciona sozinho neste aparelho. Para sincronizar é preciso criar o projeto Supabase (passo a passo no README).</div>
-        ) : user ? (
-          <>
-            <p className="small">Conectada como <strong>{user}</strong>.</p>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <button type="button" className="btn small" onClick={() => run(async () => { await pushState(state); }, 'Enviado para a nuvem.')}>Enviar este aparelho para a nuvem</button>
-              <button type="button" className="btn small" onClick={() => run(async () => {
-                const remote = await pullState();
-                if (!remote) return 'Ainda não há cópia na nuvem.';
-                dispatch({ type: 'state/replace', state: remote.state });
-              }, 'Dados da nuvem carregados.')}>Trazer da nuvem</button>
-              <button type="button" className="btn small" onClick={() => { void signOut().then(() => setUser(null)); }}>Sair</button>
-            </div>
-            <p className="small muted">A sincronização é manual e a última cópia vence. Trazer da nuvem substitui os dados deste aparelho.</p>
-          </>
-        ) : (
-          <form onSubmit={(e) => { e.preventDefault(); void run(() => signInWithEmail(email.trim()), 'Enviei um link de acesso para o seu e-mail.'); }}>
-            <div className="field"><label htmlFor="s-mail">Seu e-mail</label><input id="s-mail" type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
-            <button type="submit" className="btn primary small" disabled={!email.trim()}>Receber link de acesso</button>
-          </form>
-        )}
-      </section>
-
-      <section className="card">
-        <h3>Avisos com o app fechado (push)</h3>
-        {hasPush && user ? (
-          <button type="button" className="btn small" onClick={() => run(subscribePush, 'Este aparelho vai receber avisos mesmo com o app fechado.')}>Ativar push neste aparelho</button>
-        ) : (
-          <div className="note-box"><strong>Desligado.</strong> Precisa da sincronização acima e das chaves VAPID (README). Enquanto isso, os avisos funcionam com o app aberto ou em segundo plano.</div>
-        )}
-      </section>
+      <PushBlock />
+      <CloudBlock />
 
       <GoogleBlock />
       {msg && <p role="status" className="small"><strong>{msg}</strong></p>}
@@ -148,6 +104,98 @@ function GoogleBlock() {
       <div style={{ marginTop: 10 }}>
         <button type="button" className="btn small" onClick={() => void syncNow()} disabled={status.phase === 'syncing'}>Atualizar agora</button>
       </div>
+    </section>
+  );
+}
+
+function PushBlock() {
+  const { info } = useNotify();
+  const { subscribed, refresh, lastError } = usePushSync();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [stat, setStat] = useState<{ devices: number; pending: number } | null>(null);
+  useEffect(() => {
+    void pushStatus().then(setStat);
+  }, [subscribed, busy]);
+
+  const act = async (fn: () => Promise<string | null>, ok: string) => {
+    setBusy(true);
+    setMsg('');
+    try {
+      const err = await fn();
+      await refresh();
+      setMsg(err ?? ok);
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : 'Algo deu errado.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="card">
+      <h3>Avisos com o app fechado</h3>
+      <p className="small muted">
+        Um servidor confere o relógio e manda uma <strong>notificação</strong> para este aparelho na hora do lembrete, mesmo com a tela bloqueada. É uma notificação normal (som padrão, uma vez), não um despertador: para acordar, use o app Relógio.
+      </p>
+      {info.iosNeedsInstall && <div className="note-box"><strong>Instale o app primeiro.</strong> No iPhone, toque em Compartilhar › Adicionar à Tela de Início e abra por esse ícone.</div>}
+      {subscribed ? (
+        <div className="note-box ok"><strong>Ativado neste aparelho.</strong>{stat ? ` ${stat.devices} aparelho(s) cadastrado(s), ${stat.pending} aviso(s) agendado(s).` : ''}</div>
+      ) : (
+        !info.iosNeedsInstall && <div className="note-box"><strong>Desativado neste aparelho.</strong> Toque em ativar e permita as notificações.</div>
+      )}
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
+        {!subscribed ? (
+          <button type="button" className="btn primary small" disabled={busy || info.iosNeedsInstall} onClick={() => void act(enablePush, 'Ativado. Toque em "Enviar notificação de teste".')}>Ativar avisos com o app fechado</button>
+        ) : (
+          <>
+            <button type="button" className="btn small" disabled={busy} onClick={() => void act(async () => { const m = await sendTest(); return m; }, '')}>Enviar notificação de teste</button>
+            <button type="button" className="btn small" disabled={busy} onClick={() => void act(disablePush, 'Desativado neste aparelho.')}>Desativar</button>
+          </>
+        )}
+      </div>
+      {lastError && <p className="err" role="alert">{lastError}</p>}
+      {msg && <p role="status" className="small"><strong>{msg}</strong></p>}
+    </section>
+  );
+}
+
+function CloudBlock() {
+  const { state, dispatch } = useStore();
+  const [msg, setMsg] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [confirm, setConfirm] = useState<AppState | null>(null);
+  const when = (t: number) => new Date(t).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  return (
+    <section className="card">
+      <h3>Cópia na nuvem (celular e computador)</h3>
+      <p className="small muted">Guarda uma cópia dos seus dados no servidor para você abrir o mesmo conteúdo em outro aparelho. É manual e a última cópia enviada vale: enviar substitui a da nuvem; trazer substitui a deste aparelho.</p>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button type="button" className="btn small" disabled={busy} onClick={async () => {
+          setBusy(true); setConfirm(null);
+          try { setMsg((await cloudPut(state)) ?? 'Enviado para a nuvem.'); } catch { setMsg('Sem conexão.'); } finally { setBusy(false); }
+        }}>Enviar este aparelho para a nuvem</button>
+        <button type="button" className="btn small" disabled={busy} onClick={async () => {
+          setBusy(true);
+          try {
+            const r = await cloudGet();
+            if (r.error) setMsg(r.error);
+            else if (!r.state) setMsg('Ainda não há cópia na nuvem.');
+            else { setConfirm(r.state); setMsg(''); }
+          } catch { setMsg('Sem conexão.'); } finally { setBusy(false); }
+        }}>Trazer da nuvem</button>
+      </div>
+      {confirm && (
+        <div className="note-box" style={{ marginTop: 10 }}>
+          <strong>Substituir os dados deste aparelho?</strong>
+          <div>A cópia da nuvem é de {when(confirm.updatedAt)} e tem {confirm.items.length} itens. Os dados daqui serão trocados.</div>
+          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+            <button type="button" className="btn danger small" onClick={() => { dispatch({ type: 'state/replace', state: { ...confirm, lastCheck: Date.now() } }); setConfirm(null); setMsg('Dados da nuvem carregados.'); }}>Confirmar</button>
+            <button type="button" className="btn small" onClick={() => setConfirm(null)}>Cancelar</button>
+          </div>
+        </div>
+      )}
+      {msg && <p role="status" className="small"><strong>{msg}</strong></p>}
     </section>
   );
 }

@@ -24,12 +24,13 @@ Sem nenhuma configuração, tudo isto funciona e fica salvo **no aparelho**:
 
 | Situação | O que acontece |
 |---|---|
-| App aberto ou em segundo plano | Lembretes e alarmes avisam na hora (notificação + som). |
+| App **aberto na tela** | Lembretes e alarmes avisam na hora (notificação + som). |
+| App em segundo plano, tela bloqueada (iPhone) | **Nada toca**: o iPhone congela o app. No computador, com a aba aberta, costuma funcionar. |
 | App **totalmente fechado**, sem servidor de push | **Nada toca.** Ao reabrir, os avisos perdidos aparecem em "Avisos que passaram". Isto é uma limitação do navegador: um site não consegue agendar alarmes sozinho com o app fechado. |
-| App fechado, **com** push configurado | Avisa de verdade (ver "Push" abaixo). |
+| App fechado, **com** push configurado | Avisa de verdade, por notificação (ver "Avisos com o app fechado" abaixo). |
 | iPhone | Notificações só funcionam depois de **Compartilhar › Adicionar à Tela de Início** e abrir por esse ícone (iOS 16.4+). |
 | Alarme como o do relógio do celular | Um site não substitui o app de Relógio. Para acordar de manhã, mantenha também um alarme no relógio do aparelho. |
-| Celular ↔ computador | Só com o Supabase configurado e a sincronização é **manual** (enviar/trazer), última cópia vence. |
+| Celular ↔ computador | Só com a cópia na nuvem (Supabase), que é **manual** (enviar/trazer); a última enviada vale. |
 | Google Agenda | Só a importação inicial foi feita. A sincronização contínua **não existe ainda** (estrutura em `src/integrations/google.ts`). |
 
 ## Rodar no computador
@@ -51,23 +52,33 @@ O service worker (abrir offline) só é registrado no build (`npm run preview`),
    - **Android (Chrome)**: menu ⋮ › *Instalar app*.
    - **iPhone (Safari)**: Compartilhar › *Adicionar à Tela de Início*.
 
-Cada aparelho guarda seus próprios dados até você configurar o Supabase. Use o backup para levar os dados de um para outro.
+Cada aparelho (e cada endereço) guarda seus próprios dados. Use o backup, ou a cópia na nuvem, para levá-los de um para outro.
 
-## Sincronização + push (opcional): Supabase
+## Avisos com o app fechado (push) e cópia na nuvem
 
-1. Crie um projeto em supabase.com e rode `supabase/schema.sql` no SQL Editor.
-2. Em Authentication › URL Configuration, coloque o endereço do app da Vercel.
-3. Gere as chaves de push: `npx web-push generate-vapid-keys`.
-4. Variáveis na Vercel (veja `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_VAPID_PUBLIC_KEY`. Refaça o deploy.
-5. Publique a função de avisos (com a CLI do Supabase):
-   ```bash
-   supabase functions deploy send-reminders --no-verify-jwt
-   supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... VAPID_SUBJECT=mailto:voce@email.com
-   ```
-6. Ative as extensões `pg_cron` e `pg_net` e rode o bloco `cron.schedule` que está comentado no fim de `supabase/schema.sql`.
-7. No app: Ajustes › entrar com e-mail › *Enviar este aparelho para a nuvem* › *Ativar push neste aparelho*.
+Sem isto, lembretes e alarmes só tocam com o app **aberto na tela** (no iPhone, o app "dorme" quando a tela bloqueia). Com isto, um servidor confere o relógio e manda uma **notificação** na hora, mesmo com o celular bloqueado.
 
-> **Status:** o código de sincronização e push está escrito e passa na checagem de tipos, mas **não foi testado contra um projeto Supabase real** (não havia credenciais). Teste com cuidado e exporte um backup antes.
+**Como funciona:** o app envia à função `api/push.ts` a agenda de avisos dos próximos 14 dias (sempre que algo muda). O Supabase tem um agendador (`pg_cron`) que chama essa função a cada minuto; ela envia por Web Push o que já chegou na hora. **Não há login**: tudo usa a mesma senha do app (`ASSISTANT_PASSCODE`). As chaves de envio (VAPID) são geradas no servidor na primeira vez e ficam no banco, que ninguém de fora consegue ler.
+
+**Para ativar:**
+1. Supabase: crie um projeto e rode `supabase/setup.sql` no SQL Editor.
+2. Vercel › Environment Variables (todos os ambientes) e redeploy:
+
+| Variável | O que é |
+|---|---|
+| `SUPABASE_URL` | endereço do projeto (Project Settings › API) |
+| `SUPABASE_SERVICE_ROLE_KEY` | chave **secreta** do projeto (Project Settings › API Keys: *secret* ou *service_role*). **Nunca** vai para o navegador; digite você mesma. |
+| `VAPID_SUBJECT` | `mailto:` + seu e-mail (identifica quem envia os avisos) |
+| `ASSISTANT_PASSCODE` | a mesma senha do app |
+
+3. No celular (app **instalado** pela Tela de Início, iOS 16.4+): Ajustes › **Avisos com o app fechado** › Ativar › **Enviar notificação de teste**.
+
+**Limites reais**
+- É uma **notificação**, não um despertador: som padrão, uma vez. Modo Foco/silencioso pode escondê-la. Para acordar, use o app Relógio.
+- Avisos que chegam com mais de 10 minutos de atraso não são enviados (viram "Avisos que passaram" no app).
+- O agendador do Supabase roda a cada minuto, então um aviso pode atrasar até ~1 minuto.
+- **Status do teste:** o servidor foi testado com um Supabase **falso** e o app com um aparelho simulado. **Não foi testado com o Supabase, o Apple Push e um iPhone de verdade.** Use o botão de teste para confirmar; se falhar, o texto do erro aparece em Ajustes.
+- A "cópia na nuvem" é manual (enviar/trazer) e a última enviada vale; não é sincronização automática.
 
 ## Assistente de IA (Claude)
 
@@ -137,7 +148,8 @@ src/lib/         lógica pura e testada (datas, recorrência, tarefas, lembretes
 src/store.tsx    estado e gravação local
 src/notify.tsx   verificação de lembretes/alarmes, som, notificações
 src/screens/     telas
-src/integrations/ Supabase/push (opcional) e Google (estrutura)
-supabase/        schema.sql e função send-reminders
+src/integrations/ Google Agenda (leitura), avisos push e senha
+api/             funções do servidor (assistente, calendário, push)
+supabase/        setup.sql (banco + agendador de avisos)
 public/sw.js     service worker (offline, notificações, push)
 ```
