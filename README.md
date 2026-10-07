@@ -13,6 +13,7 @@ Sem nenhuma configuração, tudo isto funciona e fica salvo **no aparelho**:
 - **Recorrência**: todos os dias, toda semana (com escolha de dias), todo mês, todo dia 1º, personalizado (a cada N dias/semanas/meses). Cada ocorrência é concluída separadamente.
 - **Lembretes**: vários por item (1 dia, 3 h, 1 h, 30 min, 10 min, no horário).
 - **Alarmes**: nome, horário, dias, repetição (toda semana ou uma vez), ativar/desativar, tela "Parar / Soneca 5 min" com som.
+- **Alarme rápido**: escreva ou fale (microfone do teclado) "alarme 9h30 fazer café da manhã" e o alarme é criado na hora, com Desfazer. Entende "nove e meia", "da tarde", "amanhã", "todo dia", "toda segunda", "dias úteis". É um leitor de regras em português (`src/lib/quickAlarm.ts`), sem IA e sem internet; frases muito fora do comum podem não ser entendidas, e então o app avisa.
 - **Rotinas** marcáveis por dia, **Anotações** com salvamento automático, **Busca** (sem diferenciar acento/maiúscula), **Painel** só com números, **Categorias** (criar; não exclui as em uso).
 - **Backup**: Ajustes › Exportar/Restaurar (arquivo .json).
 - **Abre sem internet** depois da primeira visita.
@@ -35,7 +36,7 @@ Sem nenhuma configuração, tudo isto funciona e fica salvo **no aparelho**:
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # 34 testes (datas, recorrência, atrasados, lembretes, busca)
+npm test           # 45 testes (datas, recorrência, atrasados, lembretes, busca, alarme rápido)
 npm run build
 ```
 

@@ -3,6 +3,7 @@ import type { Alarm } from '../types';
 import { uid, useStore } from '../store';
 import { describeNotifyStatus, useNotify } from '../notify';
 import { weekdayShort } from '../lib/dates';
+import { parseQuickAlarm, toAlarm } from '../lib/quickAlarm';
 import { DeleteButton, Sheet, Switch } from '../components/common';
 import { Icon } from '../components/Icon';
 
@@ -17,7 +18,23 @@ export function Alarmes() {
   const { state, dispatch } = useStore();
   const { info, askPermission, testAlarm } = useNotify();
   const [editing, setEditing] = useState<Alarm | null>(null);
+  const [text, setText] = useState('');
+  const [made, setMade] = useState<{ alarm: Alarm; summary: string; note?: string } | null>(null);
+  const [quickError, setQuickError] = useState('');
   const status = describeNotifyStatus(info);
+  const quickCreate = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = parseQuickAlarm(text);
+    if (!q) {
+      setMade(null);
+      return setQuickError('Não achei o horário. Escreva algo como "alarme 9h30 fazer café da manhã".');
+    }
+    const alarm = toAlarm(q, uid('a'));
+    dispatch({ type: 'alarm/save', alarm });
+    setMade({ alarm, summary: q.summary, note: q.note });
+    setQuickError('');
+    setText('');
+  };
   const sorted = [...state.alarms].sort((a, b) => a.time.localeCompare(b.time));
 
   return (
@@ -35,6 +52,37 @@ export function Alarmes() {
           <button type="button" className="btn small" onClick={testAlarm}><Icon name="bell" size={16} /> Testar alarme</button>
         </div>
       </section>
+
+      <form className="card blush" onSubmit={quickCreate}>
+        <div className="card-head"><h2>Alarme rápido</h2></div>
+        <div className="field" style={{ marginBottom: 8 }}>
+          <label htmlFor="q-alarm" className="sr">Escreva ou fale o alarme</label>
+          <input
+            id="q-alarm"
+            className="input"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder='Ex.: alarme 9h30 fazer café da manhã'
+            enterKeyHint="done"
+            autoComplete="off"
+          />
+        </div>
+        <button type="submit" className="btn primary" disabled={!text.trim()}><Icon name="plus" size={16} /> Criar alarme</button>
+        <p className="small muted" style={{ marginBottom: 0 }}>
+          Dá para falar: toque no microfone do teclado. Entende "nove e meia", "amanhã", "todo dia", "toda segunda", "dias úteis", "da tarde"…
+        </p>
+        {quickError && <p className="err" role="alert">{quickError}</p>}
+        {made && (
+          <div className="note-box ok" role="status" style={{ marginTop: 10 }}>
+            <strong>Criei: {made.summary}</strong>
+            {made.note && <div>{made.note}</div>}
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+              <button type="button" className="btn small" onClick={() => { dispatch({ type: 'alarm/delete', id: made.alarm.id }); setMade(null); }}>Desfazer</button>
+              <button type="button" className="btn small" onClick={() => { setEditing(made.alarm); setMade(null); }}>Editar</button>
+            </div>
+          </div>
+        )}
+      </form>
 
       <section className="card">
         <div className="card-head">

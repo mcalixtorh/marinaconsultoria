@@ -255,3 +255,78 @@ describe('busca', () => {
     expect(normalize('Ação')).toBe('acao');
   });
 });
+
+import { parseQuickAlarm } from './quickAlarm';
+
+describe('alarme rápido (frase em português)', () => {
+  const NOW = new Date(2026, 9, 7, 8, 0); // quarta 07/10, 08:00
+  const p = (s: string) => parseQuickAlarm(s, NOW);
+
+  it('"alarme 9h30 fazer café da manhã" mantém "da manhã" no nome', () => {
+    const q = p('alarme 9h30 fazer café da manhã')!;
+    expect(q.time).toBe('09:30');
+    expect(q.name).toBe('Fazer café da manhã');
+    expect(q.repeat).toBe(false);
+    expect(q.days).toEqual([]);
+  });
+  it('aceita 9:30, 09:30, 9h e às 9', () => {
+    expect(p('alarme 9:30 café')!.time).toBe('09:30');
+    expect(p('alarme 09:30 café')!.time).toBe('09:30');
+    expect(p('alarme 9h café')!.time).toBe('09:00');
+    expect(p('alarme às 9 café')!.time).toBe('09:00');
+    expect(p('alarme às 9 café')!.name).toBe('Café');
+  });
+  it('horário por extenso: nove e meia, sete e quinze, cinco e quarenta e cinco', () => {
+    expect(p('nove e meia fazer café')!.time).toBe('09:30');
+    expect(p('às sete e quinze acordar')!.time).toBe('07:15');
+    expect(p('cinco e quarenta e cinco da tarde buscar a Alice')!.time).toBe('17:45');
+    expect(p('cinco e quarenta e cinco da tarde buscar a Alice')!.name).toBe('Buscar a Alice');
+  });
+  it('da tarde/noite soma 12 horas; da manhã não', () => {
+    expect(p('alarme 8 da noite jantar')!.time).toBe('20:00');
+    expect(p('alarme 3h da tarde reunião')!.time).toBe('15:00');
+    expect(p('alarme 8 da manhã correr')!.time).toBe('08:00');
+  });
+  it('meio-dia e meia-noite', () => {
+    expect(p('alarme meio-dia almoço')!.time).toBe('12:00');
+    expect(p('alarme meia noite dormir')!.time).toBe('00:00');
+  });
+  it('todo dia, dias úteis e fim de semana repetem', () => {
+    expect(p('todo dia 7h acordar')!.days).toEqual([0, 1, 2, 3, 4, 5, 6]);
+    expect(p('todo dia 7h acordar')!.repeat).toBe(true);
+    expect(p('7h dias úteis acordar')!.days).toEqual([1, 2, 3, 4, 5]);
+    expect(p('de segunda a sexta 7h acordar')!.days).toEqual([1, 2, 3, 4, 5]);
+    expect(p('fim de semana 9h dormir mais')!.days).toEqual([0, 6]);
+  });
+  it('toda segunda repete; "sexta" sozinho é uma vez', () => {
+    const a = p('toda segunda 8h reunião')!;
+    expect(a.days).toEqual([1]);
+    expect(a.repeat).toBe(true);
+    expect(a.name).toBe('Reunião');
+    const b = p('sexta 8h entrevista')!;
+    expect(b.days).toEqual([5]);
+    expect(b.repeat).toBe(false);
+    const c = p('toda segunda e quarta 8h academia')!;
+    expect(c.days).toEqual([1, 3]);
+    expect(c.repeat).toBe(true);
+  });
+  it('amanhã e hoje viram um dia da semana, uma vez', () => {
+    expect(p('amanhã 6h30 acordar')!.days).toEqual([4]); // quinta
+    expect(p('hoje 15h ligar para cliente')!.days).toEqual([3]);
+  });
+  it('hoje com horário que já passou vai para amanhã e avisa', () => {
+    const q = p('hoje 7h acordar')!;
+    expect(q.days).toEqual([4]);
+    expect(q.note).toContain('amanhã');
+  });
+  it('sem nome vira "Alarme"; sem horário devolve null', () => {
+    expect(p('alarme 9h30')!.name).toBe('Alarme');
+    expect(p('fazer café da manhã')).toBeNull();
+    expect(p('alarme 25h café')).toBeNull();
+  });
+  it('não confunde números do nome com horário', () => {
+    const q = p('alarme 9h30 comprar 3 cafés')!;
+    expect(q.time).toBe('09:30');
+    expect(q.name).toBe('Comprar 3 cafés');
+  });
+});
