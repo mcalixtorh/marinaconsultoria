@@ -5,7 +5,7 @@ import { describeNotifyStatus, useNotify } from '../notify';
 import { exportBackup, parseBackup } from '../lib/storage';
 import { useGcal } from '../integrations/gcalSync';
 import { readPass, savePass } from '../integrations/passcode';
-import { cloudGet, cloudPut, disablePush, enablePush, pushStatus, sendTest } from '../integrations/push';
+import { cloudGet, cloudPut, disablePush, enablePush, pushStatus, sendTest, type PushStatus } from '../integrations/push';
 import { usePushSync } from '../integrations/pushSync';
 import { Sheet } from './common';
 import type { AppState } from '../types';
@@ -113,10 +113,9 @@ function PushBlock() {
   const { subscribed, refresh, lastError } = usePushSync();
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
-  const [stat, setStat] = useState<{ devices: number; pending: number } | null>(null);
-  useEffect(() => {
-    void pushStatus().then(setStat);
-  }, [subscribed, busy]);
+  const [stat, setStat] = useState<PushStatus | null>(null);
+  const reload = () => void pushStatus().then(setStat);
+  useEffect(reload, [subscribed, busy]);
 
   const act = async (fn: () => Promise<string | null>, ok: string) => {
     setBusy(true);
@@ -140,7 +139,12 @@ function PushBlock() {
       </p>
       {info.iosNeedsInstall && <div className="note-box"><strong>Instale o app primeiro.</strong> No iPhone, toque em Compartilhar › Adicionar à Tela de Início e abra por esse ícone.</div>}
       {subscribed ? (
-        <div className="note-box ok"><strong>Ativado neste aparelho.</strong>{stat ? ` ${stat.devices} aparelho(s) cadastrado(s), ${stat.pending} aviso(s) agendado(s).` : ''}</div>
+        <div className="note-box ok">
+          <strong>Ativado neste aparelho.</strong>{stat ? ` ${stat.devices} aparelho(s) cadastrado(s), ${stat.pending} aviso(s) agendado(s).` : ''}
+          {stat?.next && <div>Próximo aviso: {new Date(stat.next.at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} — {stat.next.title}</div>}
+          {stat && <div>{stat.lastCron ? `O agendador do servidor chamou pela última vez há ${Math.max(0, Math.round((Date.now() - stat.lastCron.at) / 60000))} min.` : 'O agendador do servidor ainda não chamou. Os avisos não vão chegar enquanto isso.'}</div>}
+          {stat?.deniedAt ? <div>O agendador tentou chamar com um segredo errado (recrie o agendamento no Supabase).</div> : null}
+        </div>
       ) : (
         !info.iosNeedsInstall && <div className="note-box"><strong>Desativado neste aparelho.</strong> Toque em ativar e permita as notificações.</div>
       )}
@@ -150,6 +154,7 @@ function PushBlock() {
         ) : (
           <>
             <button type="button" className="btn small" disabled={busy} onClick={() => void act(async () => { const m = await sendTest(); return m; }, '')}>Enviar notificação de teste</button>
+            <button type="button" className="btn small" disabled={busy} onClick={reload}>Atualizar status</button>
             <button type="button" className="btn small" disabled={busy} onClick={() => void act(disablePush, 'Desativado neste aparelho.')}>Desativar</button>
           </>
         )}

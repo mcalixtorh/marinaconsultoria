@@ -120,8 +120,14 @@ export default async function handler(req: Req, res: Res): Promise<void> {
     // o agendador do banco chama "send" com um segredo que só ele e esta função conhecem
     if (action === 'send') {
       const rows = await d.get('kv', 'name=eq.cron_secret&select=value');
-      if (!rows[0] || !same(header(req, 'x-cron-secret'), rows[0].value)) return void res.status(401).json({ error: 'Não autorizado.' });
-      return void res.status(200).json(await sendDue(d));
+      if (!rows[0] || !same(header(req, 'x-cron-secret'), rows[0].value)) {
+        await d.upsert('kv', { name: 'cron_denied', value: String(Date.now()) }, 'name').catch(() => {});
+        return void res.status(401).json({ error: 'Não autorizado.' });
+      }
+      const result = await sendDue(d);
+      // deixa um rastro de que o agendador chegou até aqui (aparece em Ajustes)
+      await d.upsert('kv', { name: 'last_send', value: JSON.stringify({ at: Date.now(), ...result }) }, 'name').catch(() => {});
+      return void res.status(200).json(result);
     }
 
     if (tooManyFails(ip)) return void res.status(429).json({ error: 'Muitas tentativas. Espere alguns minutos.' });
@@ -165,8 +171,16 @@ export default async function handler(req: Req, res: Res): Promise<void> {
 
       case 'status': {
         const subs = await d.get('push_subscriptions', 'select=endpoint');
-        const pending = await d.get('scheduled', 'sent=eq.false&select=key');
-        return void res.status(200).json({ devices: subs.length, pending: pending.length });
+        const pending = await d.get('scheduled', 'sent=eq.false&order=fire_at.asc&select=key,fire_at,title');
+        const last = (await d.get('kv', 'name=eq.last_send&select=value'))[0];
+        const denied = (await d.get('kv', 'name=eq.cron_denied&select=value'))[0];
+        return void res.status(200).json({
+          devices: subs.length,
+          pending: pending.length,
+          next: pending[0] ? { at: pending[0].fire_at, title: pending[0].title } : null,
+          lastCron: last ? JSON.parse(last.value) : null,
+          deniedAt: denied ? Number(denied.value) : null,
+        });
       }
 
       case 'state-get': {

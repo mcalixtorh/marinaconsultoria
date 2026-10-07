@@ -198,12 +198,32 @@ describe('agenda de avisos e envio', () => {
   it('"status" conta aparelhos e avisos pendentes', async () => {
     await call('subscribe', { body: { subscription: SUB } });
     await call('schedule', { body: { fires: [fire('a', 1000), fire('b', 2000)] } });
-    expect((await call('status', { method: 'GET' })).json).toEqual({ devices: 1, pending: 2 });
+    const st = (await call('status', { method: 'GET' })).json;
+    expect(st).toMatchObject({ devices: 1, pending: 2, lastCron: null, deniedAt: null });
+    expect(st.next.title).toBe('T a'); // o mais cedo
   });
   it('usa o assunto VAPID configurado', async () => {
     await call('subscribe', { body: { subscription: SUB } });
     await call('test');
     expect(wp.setVapidDetails).toHaveBeenCalledWith('mailto:eu@exemplo.com', 'PUB-KEY', 'PRIV-KEY');
+  });
+});
+
+describe('diagnóstico do agendador', () => {
+  it('registra quando o agendador chega e o que fez; "status" mostra', async () => {
+    await call('subscribe', { body: { subscription: SUB } });
+    await call('schedule', { body: { fires: [{ key: 'k', fireAt: Date.now() + 1000, title: 'T', body: '' }] } });
+    tables.scheduled[0].fire_at = new Date(Date.now() - 1000).toISOString();
+    await call('send', { headers: cron() });
+    const st = (await call('status', { method: 'GET' })).json;
+    expect(st.lastCron).toMatchObject({ due: 1, sent: 1, skipped: 0 });
+    expect(Date.now() - st.lastCron.at).toBeLessThan(5000);
+  });
+  it('registra tentativas com segredo errado, sem aceitar', async () => {
+    await call('send', { headers: { 'x-cron-secret': 'errado' } });
+    const st = (await call('status', { method: 'GET' })).json;
+    expect(st.deniedAt).toBeGreaterThan(0);
+    expect(st.lastCron).toBeNull();
   });
 });
 

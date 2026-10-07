@@ -14,7 +14,7 @@ interface Ctx {
 
 const PushCtx = createContext<Ctx | null>(null);
 const EVERY_MS = 30 * 60_000;
-const DEBOUNCE_MS = 4000;
+const DEBOUNCE_MS = 600;
 
 /** Mantém o servidor com a agenda de avisos em dia sempre que o app muda. */
 export function PushSyncProvider({ children }: { children: ReactNode }) {
@@ -25,9 +25,15 @@ export function PushSyncProvider({ children }: { children: ReactNode }) {
   const [lastError, setLastError] = useState('');
   const lastSig = useRef('');
   const busy = useRef(false);
+  /** mudou algo enquanto um envio estava em andamento: precisa enviar de novo ao terminar */
+  const dirty = useRef(false);
 
   const push = useCallback(async (force: boolean) => {
-    if (busy.current || !readPass() || !(await currentSubscription())) return;
+    if (busy.current) {
+      dirty.current = true;
+      return;
+    }
+    if (!readPass() || !(await currentSubscription())) return;
     const fires = scheduleForServer(latest.current, Date.now(), 14);
     const sig = fires.map((f) => `${f.key}@${f.fireAt}@${f.title}`).join('|');
     if (!force && sig === lastSig.current) return; // nada mudou desde o último envio
@@ -43,6 +49,10 @@ export function PushSyncProvider({ children }: { children: ReactNode }) {
       setLastError('Sem conexão para atualizar os avisos.');
     } finally {
       busy.current = false;
+      if (dirty.current) {
+        dirty.current = false;
+        void push(false);
+      }
     }
   }, []);
 
@@ -64,13 +74,17 @@ export function PushSyncProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const timer = window.setInterval(() => void push(true), EVERY_MS); // renova a janela de 14 dias
-    const onVisible = () => document.visibilityState === 'visible' && void push(false);
+    // ao sair do app (esconder a tela), manda na hora o que ainda estiver pendente
+    const onVisible = () => void push(false);
+    const onHide = () => void push(false);
+    window.addEventListener('pagehide', onHide);
     const onPass = () => void refresh();
     document.addEventListener('visibilitychange', onVisible);
     window.addEventListener(PASS_EVENT, onPass);
     return () => {
       clearInterval(timer);
       document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('pagehide', onHide);
       window.removeEventListener(PASS_EVENT, onPass);
     };
   }, [push, refresh]);

@@ -7,10 +7,13 @@ import { readPass } from './passcode';
 export interface ApiResult<T = any> { ok: boolean; status: number; json: T }
 
 async function api<T = any>(action: string, body?: unknown, method: 'GET' | 'POST' = 'POST'): Promise<ApiResult<T>> {
+  const payload = method === 'POST' ? JSON.stringify(body ?? {}) : undefined;
   const res = await fetch(`/api/push?action=${action}`, {
     method,
     headers: { 'Content-Type': 'application/json', 'x-passcode': readPass() },
-    body: method === 'POST' ? JSON.stringify(body ?? {}) : undefined,
+    body: payload,
+    // termina o envio mesmo se o iPhone "dormir" o app logo depois (limite do navegador: 64 KB)
+    keepalive: payload !== undefined && payload.length < 60_000,
   });
   const json = (await res.json().catch(() => ({}))) as T;
   return { ok: res.ok, status: res.status, json };
@@ -76,9 +79,17 @@ export async function sendTest(): Promise<string> {
   return explain(r) ?? (r.json.ok ? 'Enviei. Bloqueie o celular e espere alguns segundos.' : r.json.message ?? 'Não consegui enviar.');
 }
 
-export async function pushStatus(): Promise<{ devices: number; pending: number } | null> {
+export interface PushStatus {
+  devices: number;
+  pending: number;
+  next: { at: string; title: string } | null;
+  lastCron: { at: number; due: number; sent: number; skipped: number } | null;
+  deniedAt: number | null;
+}
+
+export async function pushStatus(): Promise<PushStatus | null> {
   if (!readPass()) return null;
-  const r = await api<{ devices: number; pending: number }>('status', undefined, 'GET');
+  const r = await api<PushStatus>('status', undefined, 'GET');
   return r.ok ? r.json : null;
 }
 
