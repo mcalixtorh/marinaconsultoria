@@ -6,6 +6,7 @@ import { relativeDay } from '../lib/dates';
 import { CheckButton, Progress, pct } from '../components/common';
 import { Icon } from '../components/Icon';
 import { ItemList, ItemRow } from '../components/ItemRow';
+import { AssistantBar } from '../components/AssistantBar';
 
 export function MeuDia() {
   const { state, dispatch, now, today, nowMin } = useStore();
@@ -27,6 +28,8 @@ export function MeuDia() {
         <h1>{greeting(now.getHours())}, Marina!</h1>
         <p>{longDate(today)}</p>
       </div>
+
+      <AssistantBar />
 
       {state.missed.length > 0 && (
         <section className="card warn" aria-label="Avisos que passaram">

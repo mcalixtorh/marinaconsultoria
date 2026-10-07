@@ -13,6 +13,7 @@ Sem nenhuma configuração, tudo isto funciona e fica salvo **no aparelho**:
 - **Recorrência**: todos os dias, toda semana (com escolha de dias), todo mês, todo dia 1º, personalizado (a cada N dias/semanas/meses). Cada ocorrência é concluída separadamente.
 - **Lembretes**: vários por item (1 dia, 3 h, 1 h, 30 min, 10 min, no horário).
 - **Alarmes**: nome, horário, dias, repetição (toda semana ou uma vez), ativar/desativar, tela "Parar / Soneca 5 min" com som.
+- **Assistente (IA)**: na tela Meu dia, escreva ou fale "cancelar a entrevista da Beatriz", "passa a reunião do Leonardo para amanhã às 15h", "o que tenho amanhã?", "anota: pedir currículo da Gabriella". Veja a seção *Assistente de IA* abaixo: **precisa de configuração e de uma chave paga da Anthropic**.
 - **Alarme rápido**: escreva ou fale (microfone do teclado) "alarme 9h30 fazer café da manhã" e o alarme é criado na hora, com Desfazer. Entende "nove e meia", "da tarde", "amanhã", "todo dia", "toda segunda", "dias úteis". É um leitor de regras em português (`src/lib/quickAlarm.ts`), sem IA e sem internet; frases muito fora do comum podem não ser entendidas, e então o app avisa.
 - **Rotinas** marcáveis por dia, **Anotações** com salvamento automático, **Busca** (sem diferenciar acento/maiúscula), **Painel** só com números, **Categorias** (criar; não exclui as em uso).
 - **Backup**: Ajustes › Exportar/Restaurar (arquivo .json).
@@ -36,7 +37,7 @@ Sem nenhuma configuração, tudo isto funciona e fica salvo **no aparelho**:
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # 45 testes (datas, recorrência, atrasados, lembretes, busca, alarme rápido)
+npm test           # 72 testes (datas, recorrência, atrasados, lembretes, busca, alarme rápido, assistente)
 npm run build
 ```
 
@@ -67,6 +68,32 @@ Cada aparelho guarda seus próprios dados até você configurar o Supabase. Use 
 7. No app: Ajustes › entrar com e-mail › *Enviar este aparelho para a nuvem* › *Ativar push neste aparelho*.
 
 > **Status:** o código de sincronização e push está escrito e passa na checagem de tipos, mas **não foi testado contra um projeto Supabase real** (não havia credenciais). Teste com cuidado e exporte um backup antes.
+
+## Assistente de IA (Claude)
+
+Comandos em português viram mudanças no app. Como funciona:
+
+1. O app manda o seu pedido e um **resumo** da agenda (títulos, datas, horários, ids; sem as descrições longas) para uma função do servidor (`api/assistant.ts`).
+2. A função pergunta à Claude, que **só propõe ações** (criar, alterar, concluir, cancelar, alarme, anotação).
+3. O app **valida** cada ação contra os seus dados (`src/assistant/actions.ts`). Ids inventados e datas inválidas são recusados.
+4. **Apagar/cancelar sempre pede confirmação.** O resto é aplicado na hora, com **Desfazer** enquanto nada mais mudar.
+
+**Para ativar** (Vercel › Settings › Environment Variables, depois redeploy):
+
+| Variável | O que é |
+|---|---|
+| `ANTHROPIC_API_KEY` | chave da API em console.anthropic.com (precisa de crédito/cobrança lá). **Digite você mesma na Vercel; não cole em conversas.** |
+| `ASSISTANT_PASSCODE` | uma senha que você inventa. Sem ela a função recusa tudo, para ninguém usar a sua chave. O app pede essa senha na primeira vez em cada aparelho. |
+| `ASSISTANT_MODEL` | opcional. Padrão `claude-opus-5-5`. `claude-haiku-4-5` é bem mais barato, mas erra mais com nomes parecidos. |
+
+**Custo:** é cobrado por uso, pela Anthropic. Estimativa grosseira com o modelo padrão: algo como 1 a 3 centavos de dólar por comando, dependendo do tamanho da agenda. Defina um limite de gasto no console da Anthropic.
+
+**Limites e cuidados**
+- O assistente só mexe **no app**. Cancelar uma entrevista aqui **não** cancela no Google Agenda e **não avisa a candidata**. O app mostra um aviso quando o item veio do Google Agenda.
+- **Privacidade:** nomes de candidatas e clientes, títulos, datas e horários vão para a Anthropic a cada comando. Veja os termos da Anthropic e se isso cabe na sua política de privacidade (LGPD).
+- A IA pode errar o item ou a data. Por isso a confirmação ao apagar, o resumo do que foi feito e o Desfazer.
+- Não funciona no `npm run dev` (a função `/api` só existe publicada na Vercel).
+- **Status do teste:** a lógica de validação e a função foram testadas contra um servidor **falso** que imita a API. **Não houve teste com a Claude de verdade** (sem chave). Se a API recusar algum parâmetro, o app mostra "Erro da IA (código)" e o motivo aparece em Vercel › Logs.
 
 ## Google Agenda (futuro)
 
