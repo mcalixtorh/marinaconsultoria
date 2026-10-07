@@ -10,3 +10,6 @@ export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string 
 export const hasSupabase = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 export const hasPush = hasSupabase && Boolean(VAPID_PUBLIC_KEY);
 export const hasGoogle = Boolean(GOOGLE_CLIENT_ID);
+
+/** Assistente de IA: fica escondido até VITE_ASSISTANT=on (precisa de ANTHROPIC_API_KEY no servidor). */
+export const showAssistant = import.meta.env.VITE_ASSISTANT === 'on';

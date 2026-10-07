@@ -82,6 +82,7 @@ Comandos em português viram mudanças no app. Como funciona:
 
 | Variável | O que é |
 |---|---|
+| `VITE_ASSISTANT` | coloque `on` para **mostrar** a caixa do assistente em Meu dia (por padrão ela fica escondida) |
 | `ANTHROPIC_API_KEY` | chave da API em console.anthropic.com (precisa de crédito/cobrança lá). **Digite você mesma na Vercel; não cole em conversas.** |
 | `ASSISTANT_PASSCODE` | uma senha que você inventa. Sem ela a função recusa tudo, para ninguém usar a sua chave. O app pede essa senha na primeira vez em cada aparelho. |
 | `ASSISTANT_MODEL` | opcional. Padrão `claude-opus-5-5`. `claude-haiku-4-5` é bem mais barato, mas erra mais com nomes parecidos. |

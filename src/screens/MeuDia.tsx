@@ -7,6 +7,7 @@ import { CheckButton, Progress, pct } from '../components/common';
 import { Icon } from '../components/Icon';
 import { ItemList, ItemRow } from '../components/ItemRow';
 import { AssistantBar } from '../components/AssistantBar';
+import { showAssistant } from '../integrations/config';
 
 export function MeuDia() {
   const { state, dispatch, now, today, nowMin } = useStore();
@@ -29,7 +30,7 @@ export function MeuDia() {
         <p>{longDate(today)}</p>
       </div>
 
-      <AssistantBar />
+      {showAssistant && <AssistantBar />}
 
       {state.missed.length > 0 && (
         <section className="card warn" aria-label="Avisos que passaram">
