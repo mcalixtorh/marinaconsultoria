@@ -45,12 +45,80 @@ async function systemNotify(title: string, body: string, tag: string): Promise<v
   }
 }
 
-// ---- som do alarme (Web Audio, sem arquivo de áudio) ----
+// ---- som do alarme ----
+// Usa um elemento <audio> (toca mesmo com o iPhone no silencioso) e pede ao
+// Safari a sessão de áudio "playback". Web Audio fica só como reserva.
 let audio: AudioContext | null = null;
 let beepTimer: number | undefined;
+let el: HTMLAudioElement | null = null;
 
-function startSound(): void {
-  stopSound();
+/** WAV de 1,6 s: três "bips" de 880 Hz e uma pausa, gerado no próprio app. */
+function makeWavUrl(): string {
+  const rate = 22050;
+  const total = Math.floor(rate * 1.6);
+  const pcm = new Int16Array(total);
+  for (let i = 0; i < 3; i++) {
+    const start = Math.floor(rate * 0.28 * i);
+    const len = Math.floor(rate * 0.2);
+    for (let n = 0; n < len; n++) {
+      const env = Math.min(1, n / 400, (len - n) / 400);
+      pcm[start + n] = Math.round(Math.sin((2 * Math.PI * 880 * n) / rate) * 0.6 * env * 32767);
+    }
+  }
+  const buf = new ArrayBuffer(44 + pcm.length * 2);
+  const v = new DataView(buf);
+  const str = (o: number, t: string) => [...t].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
+  str(0, 'RIFF');
+  v.setUint32(4, 36 + pcm.length * 2, true);
+  str(8, 'WAVEfmt ');
+  v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true);
+  v.setUint16(22, 1, true);
+  v.setUint32(24, rate, true);
+  v.setUint32(28, rate * 2, true);
+  v.setUint16(32, 2, true);
+  v.setUint16(34, 16, true);
+  str(36, 'data');
+  v.setUint32(40, pcm.length * 2, true);
+  new Int16Array(buf, 44).set(pcm);
+  return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+}
+
+function getEl(): HTMLAudioElement {
+  if (!el) {
+    el = new Audio(makeWavUrl());
+    el.loop = true;
+    el.preload = 'auto';
+  }
+  return el;
+}
+
+function playbackSession(): void {
+  try {
+    const s = (navigator as unknown as { audioSession?: { type: string } }).audioSession;
+    if (s) s.type = 'playback';
+  } catch {
+    /* navegador sem suporte */
+  }
+}
+
+/** Chamado no primeiro toque na tela: o iPhone só libera som depois de um gesto. */
+export function unlockAudio(): void {
+  playbackSession();
+  const a = getEl();
+  a.muted = true;
+  a.play()
+    .then(() => {
+      a.pause();
+      a.currentTime = 0;
+      a.muted = false;
+    })
+    .catch(() => {
+      a.muted = false;
+    });
+}
+
+function webAudioBeepLoop(): void {
   try {
     audio = audio ?? new AudioContext();
     void audio.resume();
@@ -69,7 +137,6 @@ function startSound(): void {
         osc.start(t + i * 0.28);
         osc.stop(t + i * 0.28 + 0.22);
       }
-      navigator.vibrate?.([200, 100, 200]);
     };
     beep();
     beepTimer = window.setInterval(beep, 1600);
@@ -78,9 +145,21 @@ function startSound(): void {
   }
 }
 
+function startSound(): void {
+  stopSound();
+  playbackSession();
+  const a = getEl();
+  a.muted = false;
+  a.volume = 1;
+  a.currentTime = 0;
+  a.play().catch(webAudioBeepLoop);
+  navigator.vibrate?.([200, 100, 200]);
+}
+
 function stopSound(): void {
   window.clearInterval(beepTimer);
   beepTimer = undefined;
+  el?.pause();
   navigator.vibrate?.(0);
 }
 
@@ -132,6 +211,7 @@ export function NotifyProvider({ children }: { children: ReactNode }) {
   }, [dispatch]);
 
   useEffect(() => {
+    window.addEventListener('pointerdown', unlockAudio, { once: true });
     check();
     const t = window.setInterval(check, 15000);
     const onVisible = () => {

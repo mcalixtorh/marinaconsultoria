@@ -98,7 +98,7 @@ function RingScreen() {
         <h1>{ringing.title}</h1>
         <div className="ring-actions">
           <button type="button" className="btn" autoFocus onClick={stop}>Parar</button>
-          {ringing.refId && <button type="button" className="btn ghost" style={{ color: '#fff' }} onClick={snooze}>Soneca 5 min</button>}
+          {ringing.refId && <button type="button" className="btn ghost" onClick={snooze}>Soneca 5 min</button>}
         </div>
       </div>
     </div>

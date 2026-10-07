@@ -40,6 +40,9 @@ const TODAY = '2026-10-07'; // quarta-feira
 describe('datas', () => {
   it('formata data longa e saudação', () => {
     expect(longDate(TODAY)).toBe('Quarta-feira, 07 de outubro');
+    expect(greeting(0)).toBe('Boa noite');
+    expect(greeting(4)).toBe('Boa noite');
+    expect(greeting(5)).toBe('Bom dia');
     expect(greeting(8)).toBe('Bom dia');
     expect(greeting(14)).toBe('Boa tarde');
     expect(greeting(21)).toBe('Boa noite');
