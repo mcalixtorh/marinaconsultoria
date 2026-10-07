@@ -1,0 +1,1393 @@
+{
+  "_info": "Dados iniciais da Central de Rotina (importados do Google Agenda em 06/10/2026 e das anotações da Marina). Datas no formato AAAA-MM-DD; horários HH:MM; rem = minutos de antecedência dos lembretes; itens com date vazio = A organizar.",
+  "items": [
+    {
+      "id": "c09",
+      "title": "Conteúdo Dia 9 — Bastidores (Stories)",
+      "desc": "Gancho: mostre você analisando currículos",
+      "kind": "tarefa",
+      "date": "2026-10-06",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-gilka",
+      "title": "Entrevista Especialista em Marketing - Gilka",
+      "desc": "Marcada como concluída: a transcrição desta entrevista já está no seu Drive.",
+      "kind": "compromisso",
+      "date": "2026-10-06",
+      "time": "15:30",
+      "end": "16:00",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "concluido",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/xzj-kboz-ece",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "li-0710",
+      "title": "Publicar no LinkedIn: \"Quando você manda um currículo, ele não é lido com calma\"",
+      "desc": "Quando você manda um currículo, ele não é lido com calma.\n\nEu sei porque já estive do outro lado. Já abri currículo atrás de currículo para uma única vaga.\n\nEm poucos segundos, eu procurava três coisas.\n\nA experiência que a vaga pedia.\nO que a pessoa fazia no dia a dia.\nResultados e exemplos que provassem que ela sabia fazer.\n\nSe eu não achava isso rápido, passava para o próximo currículo. Muitas vezes a pessoa até era capaz, mas o currículo não mostrava.\n\nPor isso, escrever \"responsável por rotinas administrativas\" ajuda pouco. Descrever o que você entregou, com exemplos e resultados, ajuda muito mais.\n\nSe você manda currículo e ninguém responde, comece revisando as suas experiências profissionais.\n\nQuando foi a última vez que você revisou as experiências profissionais do seu currículo?\n\n#Curriculo #RecursosHumanos #RecrutamentoESelecao #Carreira #Empregabilidade\n\nDEPOIS DE PUBLICAR:\n1) Comente no próprio post: \"Se quiser que eu olhe seu currículo, me conta aqui qual é a sua área.\"\n2) Responda todos os comentários nas primeiras horas.\n3) Comente em 3 posts de profissionais de RH/carreira.\n4) Em 24h anote: impressões, comentários, visualizações do perfil, seguidores novos.",
+      "kind": "tarefa",
+      "date": "2026-10-07",
+      "time": "08:30",
+      "end": "09:00",
+      "cat": "linkedin",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30,
+        0
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-adla",
+      "title": "Entrevista Recepcionista - Adla Bruna",
+      "desc": "",
+      "kind": "compromisso",
+      "date": "2026-10-07",
+      "time": "10:00",
+      "end": "10:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/bji-kthb-ddw",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-beatriz",
+      "title": "Entrevista Recepcionista - Beatriz",
+      "desc": "",
+      "kind": "compromisso",
+      "date": "2026-10-07",
+      "time": "10:30",
+      "end": "11:00",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/chr-vfqp-sbt",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "cl-leo",
+      "title": "Otimização LinkedIn - Leonardo Carvalho",
+      "desc": "Alinhamento e levantamento das informações necessárias para a otimização do LinkedIn.",
+      "kind": "compromisso",
+      "date": "2026-10-07",
+      "time": "12:00",
+      "end": "12:30",
+      "cat": "clientes",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/ysr-jhfy-cru",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-steph",
+      "title": "Entrevista Enfermeira - Stephanie",
+      "desc": "",
+      "kind": "compromisso",
+      "date": "2026-10-07",
+      "time": "15:00",
+      "end": "15:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/usy-qjnt-ddc",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "cl-luiza",
+      "title": "Otimização Currículo e Linkedin - Luiza Pinho",
+      "desc": "Alinhamento e levantamento das informações necessárias para a otimização do currículo e do LinkedIn.",
+      "kind": "compromisso",
+      "date": "2026-10-07",
+      "time": "17:00",
+      "end": "17:30",
+      "cat": "clientes",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/zzj-xxvr-ujr",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-lidiane",
+      "title": "Entrevista - Lidiane",
+      "desc": "A vaga não está informada no convite — confirmar.",
+      "kind": "compromisso",
+      "date": "2026-10-07",
+      "time": "19:00",
+      "end": "19:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/fod-dwxq-cmw",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "li-0810",
+      "title": "Publicar no LinkedIn: \"A vaga mais difícil que já conduzi\" (Qualtrics)",
+      "desc": "A vaga mais difícil que já conduzi pedia experiência em implantação do Qualtrics.\n\nO Qualtrics é uma plataforma de gestão de experiência. Empresas usam para medir a experiência de clientes e colaboradores, fazer pesquisas de mercado e acompanhar a experiência com produtos e marcas. É um sistema complexo, e quem trabalha com ele costuma ser muito bom.\n\nEu triei muitos profissionais que conheciam a ferramenta. Mas conhecer não é o mesmo que ter implantado.\n\nTinha um segundo filtro: o gestor queria experiência sênior e também um perfil comportamental específico. Teve candidato com muita experiência técnica que não tinha o perfil que ele procurava.\n\nPor isso foi tão difícil fechar essa vaga.\n\nFica uma lição para quem está se candidatando: escreva no currículo exatamente o que fez com a ferramenta. Usou, administrou ou implantou? Para o recrutador, são experiências diferentes.\n\nNo seu currículo, está claro o que você usou e o que você implantou?\n\n#Recrutamento #RecrutamentoESelecao #TechRecruiting #Curriculo #RecursosHumanos",
+      "kind": "tarefa",
+      "date": "2026-10-08",
+      "time": "08:30",
+      "end": "09:00",
+      "cat": "linkedin",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30,
+        0
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c11",
+      "title": "Conteúdo Dia 11 — Serviço (Post)",
+      "desc": "Gancho: \"Eu faço e conserto currículos.\"",
+      "kind": "tarefa",
+      "date": "2026-10-08",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-fabiane",
+      "title": "Entrevista Gerente de Vendas - Fabiane",
+      "desc": "",
+      "kind": "compromisso",
+      "date": "2026-10-08",
+      "time": "13:00",
+      "end": "13:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/jwx-ixax-pxs",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-gv14",
+      "title": "Entrevista Gerente de Vendas",
+      "desc": "O nome da candidata não está no convite (enviado para arleusemarins@gmail.com) — confirmar.",
+      "kind": "compromisso",
+      "date": "2026-10-08",
+      "time": "14:00",
+      "end": "14:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/pdp-bdpm-kzb",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-viviane",
+      "title": "Entrevista - Viviane",
+      "desc": "A vaga não está informada no convite — confirmar.",
+      "kind": "compromisso",
+      "date": "2026-10-08",
+      "time": "15:00",
+      "end": "15:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/pep-knxs-hns",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-adriana",
+      "title": "Entrevista Especialista em Marketing - Adriana",
+      "desc": "O convite foi enviado para alessandra.fujikawa@gmail.com, mas o título diz Adriana — confirmar o nome.",
+      "kind": "compromisso",
+      "date": "2026-10-08",
+      "time": "16:30",
+      "end": "17:00",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/wgn-uhkw-kmz",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "e-marcia",
+      "title": "Entrevista Especialista em Marketing - Marcia Toledo",
+      "desc": "",
+      "kind": "compromisso",
+      "date": "2026-10-08",
+      "time": "17:00",
+      "end": "17:30",
+      "cat": "entrevistas",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "https://meet.google.com/hbw-dumy-mxu",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "li-0910",
+      "title": "Publicar no LinkedIn: pergunta para quem trabalha com recrutamento",
+      "desc": "Pergunta pra quem trabalha com recrutamento\n\nQuando você abre um currículo pra uma vaga, o que você olha primeiro?\n\nO cargo mais recente? O tempo que a pessoa ficou nas empresas? As experiências? A formação? Ou outra coisa?\n\nEu já tenho a minha resposta, mas fiquei curiosa pra saber a de vocês.\n\nMe conta nos comentários!\n\n#Recrutamento #RecrutamentoESeleção #RH #Currículo #Triagem",
+      "kind": "tarefa",
+      "date": "2026-10-09",
+      "time": "08:30",
+      "end": "09:00",
+      "cat": "linkedin",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30,
+        0
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c12",
+      "title": "Conteúdo Dia 12 — Enquete (Stories)",
+      "desc": "Gancho: \"Há quanto tempo você não atualiza seu currículo?\"",
+      "kind": "tarefa",
+      "date": "2026-10-09",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c13",
+      "title": "Conteúdo Dia 13 — Processo seletivo (Reels)",
+      "desc": "Gancho: \"O que acontece depois que você envia seu currículo?\"",
+      "kind": "tarefa",
+      "date": "2026-10-10",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c14",
+      "title": "Conteúdo Dia 14 — Vagas da semana (Carrossel)",
+      "desc": "Gancho: reúna algumas oportunidades",
+      "kind": "tarefa",
+      "date": "2026-10-11",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c15",
+      "title": "Conteúdo Dia 15 — Sua opinião profissional (Texto/LinkedIn)",
+      "desc": "Gancho: \"Uma coisa que candidatos precisam entender sobre recrutamento…\"",
+      "kind": "tarefa",
+      "date": "2026-10-12",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c16",
+      "title": "Conteúdo Dia 16 — Antes x depois (Reels)",
+      "desc": "Gancho: transformação visual de um currículo",
+      "kind": "tarefa",
+      "date": "2026-10-13",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "chat1",
+      "title": "Lembrete: faltam 5 dias para tirar o cartão do ChatGPT",
+      "desc": "Dia 19/10 termina a experiência grátis de 1 mês. Cancele a assinatura e remova o cartão antes da cobrança.",
+      "kind": "lembrete",
+      "date": "2026-10-14",
+      "time": "",
+      "end": "",
+      "cat": "financeiro",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c17",
+      "title": "Conteúdo Dia 17 — Rotina real (Stories)",
+      "desc": "Gancho: trabalho, café, computador, reunião, vaga etc.",
+      "kind": "tarefa",
+      "date": "2026-10-14",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c18",
+      "title": "Conteúdo Dia 18 — LinkedIn (Reels)",
+      "desc": "Gancho: \"3 mudanças que eu faria AGORA no seu LinkedIn.\"",
+      "kind": "tarefa",
+      "date": "2026-10-15",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c19",
+      "title": "Conteúdo Dia 19 — Resultado/cliente (Post)",
+      "desc": "Gancho: feedback ou resultado de um trabalho seu",
+      "kind": "tarefa",
+      "date": "2026-10-16",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c20",
+      "title": "Conteúdo Dia 20 — Erro comum (Reels)",
+      "desc": "Gancho: \"Pare de colocar isso no seu currículo.\"",
+      "kind": "tarefa",
+      "date": "2026-10-17",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c21",
+      "title": "Conteúdo Dia 21 — Conteúdo pessoal (Foto)",
+      "desc": "Gancho: conte um pouco da sua trajetória no RH",
+      "kind": "tarefa",
+      "date": "2026-10-18",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "chat2",
+      "title": "URGENTE - Tirar o cartão do ChatGPT",
+      "desc": "Cancelar a assinatura e remover o cartão do ChatGPT para não ser cobrada. O mês grátis termina hoje.",
+      "kind": "tarefa",
+      "date": "2026-10-19",
+      "time": "",
+      "end": "",
+      "cat": "financeiro",
+      "prio": "urgente",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c22",
+      "title": "Conteúdo Dia 22 — Vaga (Post)",
+      "desc": "Gancho: oportunidade disponível",
+      "kind": "tarefa",
+      "date": "2026-10-19",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "fer",
+      "title": "Último prazo do acompanhamento da consultoria – Fernanda Pinheiro",
+      "desc": "Último dia do acompanhamento da consultoria da Fernanda Pinheiro: fechar currículo e LinkedIn, retorno das entrevistas e treino das perguntas que faltaram.",
+      "kind": "tarefa",
+      "date": "2026-10-20",
+      "time": "",
+      "end": "",
+      "cat": "clientes",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c23",
+      "title": "Conteúdo Dia 23 — Currículo (Carrossel)",
+      "desc": "Gancho: \"Currículo bonito ≠ currículo bom.\"",
+      "kind": "tarefa",
+      "date": "2026-10-20",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "alice",
+      "title": "Consulta Pediatria - Alice (Dra. Regina Coeli)",
+      "desc": "Paciente: Alice\nMotivo: Consulta Pediatria\nMédica: Dra. Regina Coeli\nUnidade: Tijuca",
+      "kind": "compromisso",
+      "date": "2026-10-20",
+      "time": "10:30",
+      "end": "11:30",
+      "cat": "alice",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c24",
+      "title": "Conteúdo Dia 24 — Perguntas (Stories)",
+      "desc": "Gancho: \"Me manda uma dúvida sobre currículo ou processo seletivo.\"",
+      "kind": "tarefa",
+      "date": "2026-10-21",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c25",
+      "title": "Conteúdo Dia 25 — Responder dúvida (Reels)",
+      "desc": "Gancho: pegue uma pergunta dos Stories e responda",
+      "kind": "tarefa",
+      "date": "2026-10-22",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c26",
+      "title": "Conteúdo Dia 26 — LinkedIn (Carrossel)",
+      "desc": "Gancho: \"5 coisas que eu mudaria no seu LinkedIn.\"",
+      "kind": "tarefa",
+      "date": "2026-10-23",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c27",
+      "title": "Conteúdo Dia 27 — Bastidores R&S (Reels)",
+      "desc": "Gancho: \"POV: você trabalha com recrutamento e chegam 200 currículos.\"",
+      "kind": "tarefa",
+      "date": "2026-10-24",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c28",
+      "title": "Conteúdo Dia 28 — Serviço (Post)",
+      "desc": "Gancho: currículo + otimização de LinkedIn",
+      "kind": "tarefa",
+      "date": "2026-10-25",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c29",
+      "title": "Conteúdo Dia 29 — Conteúdo humano (Foto/Reels)",
+      "desc": "Gancho: algo real sobre sua carreira ou seu dia",
+      "kind": "tarefa",
+      "date": "2026-10-26",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "rit26",
+      "title": "Preparar ritual mensal",
+      "desc": "Separar os materiais para os rituais mensais de prosperidade, beleza e fechamento/abertura de ciclo. (Vem de um evento recorrente do Google Agenda; confira a regra de repetição lá.)",
+      "kind": "tarefa",
+      "date": "2026-10-26",
+      "time": "19:00",
+      "end": "19:30",
+      "cat": "autocuidado",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "c30",
+      "title": "Conteúdo Dia 30 — Autoridade + CTA (Reels)",
+      "desc": "Gancho: \"Se você está procurando emprego, começa fazendo isso.\"",
+      "kind": "tarefa",
+      "date": "2026-10-27",
+      "time": "09:00",
+      "end": "09:30",
+      "cat": "conteudo",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "rit28",
+      "title": "Revisar ritual mensal",
+      "desc": "Conferir os materiais dos rituais mensais e pensar no que quero encerrar e cultivar no próximo ciclo. (Vem de um evento recorrente do Google Agenda.)",
+      "kind": "tarefa",
+      "date": "2026-10-28",
+      "time": "19:00",
+      "end": "19:30",
+      "cat": "autocuidado",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "rit31",
+      "title": "Ritual de fim do mês",
+      "desc": "Preparar os rituais mensais de prosperidade, beleza e fechamento/abertura de ciclo para a virada do mês. (Vem de um evento recorrente do Google Agenda.)",
+      "kind": "tarefa",
+      "date": "2026-10-31",
+      "time": "19:00",
+      "end": "19:30",
+      "cat": "autocuidado",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [
+        30
+      ],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Google Agenda"
+    },
+    {
+      "id": "ig-ini",
+      "title": "Início do Ciclo 1 de crescimento do Instagram (@mcalixtorh)",
+      "desc": "Meta do ciclo: 286 → 400 seguidores até 05/11.",
+      "kind": "lembrete",
+      "date": "2026-10-06",
+      "time": "",
+      "end": "",
+      "cat": "instagram",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    },
+    {
+      "id": "ig-fim",
+      "title": "Fim do Ciclo 1 do Instagram — meta de 400 seguidores",
+      "desc": "Conferir seguidores, alcance de não seguidores, visitas ao perfil, compartilhamentos, salvamentos, directs sobre serviços e clientes conquistados.",
+      "kind": "lembrete",
+      "date": "2026-11-05",
+      "time": "",
+      "end": "",
+      "cat": "instagram",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    },
+    {
+      "id": "o-eman",
+      "title": "Propor parceria à blogueira Emanuelli (divulgar seus serviços só nos stories)",
+      "desc": "",
+      "kind": "tarefa",
+      "date": "",
+      "time": "",
+      "end": "",
+      "cat": "instagram",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    },
+    {
+      "id": "o-metri",
+      "title": "Conectar o Metricool para trazer curtidas, comentários e publicações do Instagram",
+      "desc": "",
+      "kind": "tarefa",
+      "date": "",
+      "time": "",
+      "end": "",
+      "cat": "instagram",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    },
+    {
+      "id": "o-prompt4",
+      "title": "Prompt 4 — Networking Estratégico (5 mensagens para se aproximar de profissionais de RH no LinkedIn)",
+      "desc": "",
+      "kind": "tarefa",
+      "date": "",
+      "time": "",
+      "end": "",
+      "cat": "linkedin",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    },
+    {
+      "id": "o-plen",
+      "title": "Agendar conversa com a recrutadora da Plenitude antes de decidir sobre a vaga teste",
+      "desc": "",
+      "kind": "tarefa",
+      "date": "",
+      "time": "",
+      "end": "",
+      "cat": "rs",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    },
+    {
+      "id": "o-bem",
+      "title": "Registrar os dados do Painel de Bem-estar",
+      "desc": "Você registra diariamente. Defina horário e se vai repetir todo dia.",
+      "kind": "tarefa",
+      "date": "",
+      "time": "",
+      "end": "",
+      "cat": "autocuidado",
+      "prio": "media",
+      "status": "pendente",
+      "rem": [],
+      "recur": {
+        "type": "none",
+        "weekdays": [],
+        "n": 1,
+        "unit": "week"
+      },
+      "link": "",
+      "src": "Suas anotações"
+    }
+  ],
+  "categories": [
+    {
+      "id": "rs",
+      "name": "Recrutamento & Seleção",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "insp",
+      "name": "Inspiração RH",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "clientes",
+      "name": "Clientes",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "entrevistas",
+      "name": "Entrevistas",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "candidatos",
+      "name": "Candidatos",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "conteudo",
+      "name": "Conteúdo",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "group": "trabalho",
+      "color": "#C25259"
+    },
+    {
+      "id": "casa",
+      "name": "Casa",
+      "group": "pessoal",
+      "color": "#8A7566"
+    },
+    {
+      "id": "familia",
+      "name": "Família",
+      "group": "pessoal",
+      "color": "#8A7566"
+    },
+    {
+      "id": "alice",
+      "name": "Alice",
+      "group": "pessoal",
+      "color": "#8A7566"
+    },
+    {
+      "id": "compromissos",
+      "name": "Compromissos",
+      "group": "pessoal",
+      "color": "#8A7566"
+    },
+    {
+      "id": "financeiro",
+      "name": "Financeiro",
+      "group": "pessoal",
+      "color": "#8A7566"
+    },
+    {
+      "id": "saude",
+      "name": "Saúde",
+      "group": "pessoal",
+      "color": "#8A7566"
+    },
+    {
+      "id": "autocuidado",
+      "name": "Autocuidado",
+      "group": "pessoal",
+      "color": "#8A7566"
+    }
+  ],
+  "routines": [
+    {
+      "id": "r-manha",
+      "name": "Rotina da manhã",
+      "steps": [
+        {
+          "id": "r-manha-0",
+          "t": "Acordar"
+        },
+        {
+          "id": "r-manha-1",
+          "t": "Organizar prioridades"
+        },
+        {
+          "id": "r-manha-2",
+          "t": "Ver agenda"
+        },
+        {
+          "id": "r-manha-3",
+          "t": "Responder mensagens importantes"
+        }
+      ],
+      "done": {}
+    },
+    {
+      "id": "r-trab",
+      "name": "Rotina de trabalho",
+      "steps": [
+        {
+          "id": "r-trab-0",
+          "t": "Conferir candidatos"
+        },
+        {
+          "id": "r-trab-1",
+          "t": "Ver entrevistas"
+        },
+        {
+          "id": "r-trab-2",
+          "t": "Responder clientes"
+        },
+        {
+          "id": "r-trab-3",
+          "t": "Ver pendências"
+        },
+        {
+          "id": "r-trab-4",
+          "t": "Produzir conteúdo"
+        }
+      ],
+      "done": {}
+    },
+    {
+      "id": "r-triagem",
+      "name": "Rotina de triagem (R&S)",
+      "steps": [
+        {
+          "id": "r-triagem-0",
+          "t": "Conferir currículos novos em mcalixtorh@gmail.com"
+        },
+        {
+          "id": "r-triagem-1",
+          "t": "Extrair nome e telefone de cada currículo"
+        },
+        {
+          "id": "r-triagem-2",
+          "t": "Organizar os e-mails na pasta triagemRH-processados (subpasta da vaga) e marcar como lidos"
+        },
+        {
+          "id": "r-triagem-3",
+          "t": "Enviar o link de inscrição da vaga pelo WhatsApp"
+        },
+        {
+          "id": "r-triagem-4",
+          "t": "Triar a etapa Candidatura no Quickin: Triagem ou Reprovado, com o motivo"
+        },
+        {
+          "id": "r-triagem-5",
+          "t": "Conferir a etapa Teste: testes e vídeo de apresentação"
+        }
+      ],
+      "done": {}
+    },
+    {
+      "id": "r-posli",
+      "name": "Depois de publicar no LinkedIn",
+      "steps": [
+        {
+          "id": "r-posli-0",
+          "t": "Comentar no próprio post pedindo a área da pessoa"
+        },
+        {
+          "id": "r-posli-1",
+          "t": "Responder todos os comentários nas primeiras horas"
+        },
+        {
+          "id": "r-posli-2",
+          "t": "Comentar em 3 posts de profissionais de RH/carreira"
+        },
+        {
+          "id": "r-posli-3",
+          "t": "Em 24h anotar impressões, comentários, visitas ao perfil e seguidores novos"
+        }
+      ],
+      "done": {}
+    }
+  ],
+  "alarms": [
+    {
+      "id": "a1",
+      "time": "07:00",
+      "name": "Acordar",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "repeat": true,
+      "enabled": false
+    },
+    {
+      "id": "a2",
+      "time": "09:50",
+      "name": "Entrevista em 10 minutos",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "repeat": true,
+      "enabled": false
+    },
+    {
+      "id": "a3",
+      "time": "23:30",
+      "name": "Começar rotina da noite",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "repeat": true,
+      "enabled": false
+    }
+  ],
+  "notes": [
+    {
+      "id": "n1",
+      "at": 1791341932272,
+      "text": "PARA CONFIRMAR (importado da agenda)\n- Entrevista de 08/10 às 14:00 (Gerente de Vendas): sem nome da candidata no convite.\n- Entrevista de 08/10 às 16:30: título diz Adriana, convite foi para alessandra.fujikawa@gmail.com.\n- Entrevistas de Lidiane (07/10, 19:00) e Viviane (08/10, 15:00): vaga não informada.\n- O plano de conteúdo não tem \"Dia 10\" na agenda (07/10 tem só o post de LinkedIn)."
+    }
+  ]
+}
