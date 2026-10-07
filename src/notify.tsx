@@ -52,19 +52,25 @@ let audio: AudioContext | null = null;
 let beepTimer: number | undefined;
 let el: HTMLAudioElement | null = null;
 
-/** WAV de 1,6 s: três "bips" de 880 Hz e uma pausa, gerado no próprio app. */
+/**
+ * WAV de 1,5 s com quatro bips alternando 1100 e 1500 Hz. A onda é "achatada"
+ * (tanh) para ficar bem mais alta que uma senoide pura, e as frequências ficam
+ * onde o alto-falante do celular rende mais.
+ */
 function makeWavUrl(): string {
   const rate = 22050;
-  const total = Math.floor(rate * 1.6);
+  const total = Math.floor(rate * 1.5);
   const pcm = new Int16Array(total);
-  for (let i = 0; i < 3; i++) {
-    const start = Math.floor(rate * 0.28 * i);
-    const len = Math.floor(rate * 0.2);
+  const beeps = [1100, 1500, 1100, 1500];
+  const len = Math.floor(rate * 0.2);
+  beeps.forEach((freq, i) => {
+    const start = Math.floor(rate * 0.25 * i);
     for (let n = 0; n < len; n++) {
-      const env = Math.min(1, n / 400, (len - n) / 400);
-      pcm[start + n] = Math.round(Math.sin((2 * Math.PI * 880 * n) / rate) * 0.6 * env * 32767);
+      const env = Math.min(1, n / 200, (len - n) / 200);
+      const wave = Math.tanh(3 * Math.sin((2 * Math.PI * freq * n) / rate)) / Math.tanh(3);
+      pcm[start + n] = Math.round(wave * 0.95 * env * 32767);
     }
-  }
+  });
   const buf = new ArrayBuffer(44 + pcm.length * 2);
   const v = new DataView(buf);
   const str = (o: number, t: string) => [...t].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
@@ -128,10 +134,10 @@ function webAudioBeepLoop(): void {
       for (let i = 0; i < 3; i++) {
         const osc = audio.createOscillator();
         const gain = audio.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = 880;
+        osc.type = 'square';
+        osc.frequency.value = i % 2 ? 1500 : 1100;
         gain.gain.setValueAtTime(0.0001, t + i * 0.28);
-        gain.gain.exponentialRampToValueAtTime(0.35, t + i * 0.28 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.9, t + i * 0.28 + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.28 + 0.2);
         osc.connect(gain).connect(audio.destination);
         osc.start(t + i * 0.28);
